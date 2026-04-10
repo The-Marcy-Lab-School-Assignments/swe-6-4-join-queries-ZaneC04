@@ -14,7 +14,7 @@ const getAllBookmarksWithUsername = async () => {
 const getBookmarksByUsername = async (username) => {
   const query = 'SELECT bookmarks.title, bookmarks.url, users.username FROM bookmarks INNER JOIN users ON bookmarks.user_id = users.user_id WHERE users.username = $1'
   const { rows } = await pool.query(query, [username])
-  return rows
+  return rows[0]
 };
 
 // 3. Get all bookmarks that have at least one tag, along with the tag name.
@@ -41,7 +41,7 @@ const getUsersWithBookmarkCount = async () => {
 const getBookmarksWithNoTags = async () => {
   const query = 'SELECT bookmarks.title, bookmarks.url, users.username FROM bookmarks INNER JOIN users ON bookmarks.user_id = users.user_id LEFT JOIN bookmark_tags ON bookmarks.bookmark_id = bookmark_tags.bookmark_id WHERE bookmark_tags.tag_id IS NULL';
   const { rows } = await pool.query(query)
-  return rows
+  return rows || null
 };
 
 const main = async () => {
